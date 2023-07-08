@@ -1,0 +1,86 @@
+version: "3.9"
+networks:
+  default:
+    name: ghilbut
+services:
+  ## PostgreSQL and metrics
+  postgres:
+    image: postgres:15.3
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+    ports:
+      - 0.0.0.0:5432:5432
+    read_only: true
+    restart: always
+    tmpfs: /var/run/postgresql
+    volumes:
+      - ./conf/postgres/init:/docker-entrypoint-initdb.d:ro
+      - .data/postgres:/var/lib/postgresql/data
+  postgres-exporter:
+    depends_on:
+      - postgres
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.13.1
+    container_name: postgres-exporter
+    environment:
+      - DATA_SOURCE_URI=postgres:5432?sslmode=disable
+      - DATA_SOURCE_USER=postgres
+      - DATA_SOURCE_PASS=postgrespw
+    expose:
+      - 9187
+    read_only: true
+    restart: always
+  ## Docker containers metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: cadvisor
+    privileged: true
+    ports:
+      - 0.0.0.0:8080:8080
+    read_only: true
+    restart: always
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run:/var/run:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  ## Prometheus
+  prometheus:
+    depends_on:
+      - cadvisor
+      - postgres-exporter
+    image: prom/prometheus:v2.45.0
+    container_name: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --enable-feature=native-histograms
+      - --storage.tsdb.path=/prometheus/data
+      - --storage.tsdb.retention.time=1d
+      - --web.enable-remote-write-receiver
+    ports:
+      - 0.0.0.0:9090:9090
+    read_only: true
+    restart: always
+    volumes:
+      - ./conf/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - .data/prometheus:/prometheus
+  ## Grafana dashboard
+  grafana:
+    depends_on:
+      - postgres
+      - prometheus
+    image: grafana/grafana:10.0.1
+    container_name: grafana
+    ports:
+      - 0.0.0.0:13000:3000
+    read_only: true
+    restart: always
+    volumes:
+      - ./conf/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./conf/grafana/provisioning:/etc/grafana/provisioning:ro
+      - .data/grafana:/var/lib/grafana
+---

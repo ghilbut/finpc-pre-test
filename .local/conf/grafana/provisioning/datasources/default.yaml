@@ -1,0 +1,27 @@
+apiVersion: 1
+datasources:
+  ## https://grafana.com/docs/grafana/latest/datasources/prometheus/
+  - name: Prometheus
+    type: prometheus
+    url:  http://prometheus:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      httpMethod: POST
+      manageAlerts: true
+      prometheusType: Prometheus
+      prometheusVersion: 2.44.0
+      cacheLevel: High
+      incrementalQuerying: true
+      incrementalQueryOverlapWindow: 10m
+      exemplarTraceIdDestinations:
+  ## https://grafana.com/docs/grafana/latest/datasources/postgres/
+  - name: Postgres
+    type: postgres
+    url:  postgres:5432
+    user: postgres
+    secureJsonData:
+      password: postgrespw
+    jsonData:
+      database: postgres
+      sslmode: disable
