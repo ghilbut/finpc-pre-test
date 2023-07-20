@@ -1,8 +1,8 @@
 # 사전테스트
 
-본 사전테스트는 `글로벌핀테크산업진흥센터 - [엔지니어 중/고급과정 - 스타트업 서비스 개발/확장 단계 교육]`에 참여하기 위한 테스트 입니다. 해당 과정에서는 짧은 시간에 매우 다양하고 넓은 범위의 기술들이 소개되고 실습에 사용되기 때문에 과정을 소화할 수 있는지를 확인하기 위하여 테스트를 준비하게 되었습니다. 테스트에 사용되는 기술들과 환경은 본 교육과정에서도 동일하게 적용되므로 과정에 참여하시기 전에 예습의 효과도 기대하고 있습니다.
+본 사전테스트는 `글로벌핀테크산업진흥센터 - [엔지니어 중/고급과정 - 스타트업 서비스 개발/확장 단계 교육]`에 참여하기 위한 테스트 입니다. 해당 과정에서는 짧은 시간에 매우 다양하고 넓은 범위의 기술들이 소개되고 실습에 사용되기 때문에 과정을 소화할 수 있는지를 확인하기 위하여 테스트를 준비하게 되었습니다. 테스트에 사용되는 기술들과 환경은 교육과정에서도 동일하게 적용되므로 과정에 참여하시기 전에 예습의 효과도 기대하고 있습니다.
 
-아래의 안내에 따라 환경을 구성하고 실제 서비스 코드를 구동하면서 질문에 답해주시기 바랍니다. 문제의 질문은 안내에 따랐을 때 어떤 결과가 나오는 지에 대한 것과 동작을 완성하기 위해 추가해야 하는 것들에 대한 것 입니다.
+아래의 안내에 따라 환경을 구성하고 실제 서비스 코드를 구동하면서 질문에 답해주시기 바랍니다. 문제는 안내에 따랐을 때 어떤 결과가 나오는 지와 동작을 완성하기 위해 추가해야 하는 것들을 질문합니다.
 
 ## A. 로컬 환경에 인프라 설치하기
 
@@ -14,17 +14,17 @@ $ docker-compose up -d
 $ docker ps -a
 ```
 
-위 명령이 성공하면 아래와 같은 인프라들이 설치됩니다.
+위 명령이 성공하면 아래의 인프라들이 설치됩니다.
 
-* PostgreSQL
-* Grafana
-* Prometheus
-* Prometheus export for PostgreSQL
-* cAdvisor
+* [PostgreSQL](https://www.postgresql.org/)
+* [Grafana](https://grafana.com/grafana/)
+* [Prometheus](https://prometheus.io/)
+* [Prometheus exporter for PostgreSQL](https://github.com/prometheus-community/postgres_exporter)
+* [cAdvisor](https://github.com/google/cadvisor)
 
 ## B. 그라파나에 대시보드 설치하기
 
-1\. 아래의 주소로 계정으로 그라파나에 로그인 합니다.
+1\. 아래의 주소와 계정으로 그라파나에 로그인 합니다.
 * http://localhost:13000
 * ID: admin
 * PW: adminpw
@@ -107,7 +107,7 @@ $ ${repository_path}/next.js
 $ yarn install
 ```
 
-3\. 아래의 명령으로 `nex.js` 개발 서버를 실행합니다.
+3\. 아래의 명령으로 `next.js` 개발 서버를 실행합니다.
 ```shell
 $ ${repository_path}/next.js
 $ yarn dev
